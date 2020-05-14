@@ -1,4 +1,4 @@
-require_relative 'boot'
+require_relative "boot"
 require "rails"
 require "active_model/railtie"
 require "active_job/railtie"
@@ -20,22 +20,24 @@ module SlowfoodApi
 
     config.middleware.insert_before 0, Rack::Cors do
       allow do
-        origins '*'
-        resource '*', 
-          headers: :any, 
+        origins "*"
+        resource "*",
+          headers: :any,
           methods: %i[get post put delete],
           expose: %w(access-token expiry token-type uid client),
           max_age: 0
       end
     end
-      
+
     config.generators do |generate|
-        generate.helper false
-        generate.assets false
-        generate.view_specs false
-        generate.helper_specs false
-        generate.routing_specs false
-        generate.controller_specs false
+      generate.helper false
+      generate.assets false
+      generate.view_specs false
+      generate.helper_specs false
+      generate.routing_specs false
+      generate.controller_specs false
     end
+    config.stripe.secret_key = Rails.application.credentials.stripe[:secret_key]
+    config.stripe.publishable_key = Rails.application.credentials.stripe[:pk_key]
   end
 end

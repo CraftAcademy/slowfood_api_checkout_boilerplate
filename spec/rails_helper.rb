@@ -1,16 +1,18 @@
-require 'coveralls'
-Coveralls.wear_merged!('rails')
+require "coveralls"
+Coveralls.wear_merged!("rails")
 
-ENV['RAILS_ENV'] ||= 'test'
-require File.expand_path('../../config/environment', __FILE__)
+ENV["RAILS_ENV"] ||= "test"
+require File.expand_path("../../config/environment", __FILE__)
 
-abort('The Rails environment is running in production mode!') if Rails.env.production?
-require 'spec_helper'
-require 'rspec/rails'
+abort("The Rails environment is running in production mode!") if Rails.env.production?
+require "spec_helper"
+require "rspec/rails"
+require 'stripe_mock'
+
 
 ActiveRecord::Migration.maintain_test_schema!
 
-Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
+Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 
 RSpec.configure do |config|
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
@@ -19,4 +21,11 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   config.include FactoryBot::Syntax::Methods
   config.include(Shoulda::Matchers::ActiveRecord, type: :model)
+  config.before(:each) do
+    @stripe_test_helper = StripeMock.create_test_helper
+    StripeMock.start
+  end
+  config.after(:each) do
+    StripeMock.stop
+  end
 end
