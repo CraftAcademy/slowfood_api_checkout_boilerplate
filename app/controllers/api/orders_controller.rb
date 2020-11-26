@@ -1,10 +1,19 @@
+# frozen_string_literal: true
+
 class Api::OrdersController < ApplicationController
   before_action :authenticate_user!
   def create
     product = Product.find_by(id: params[:product_id])
     order = current_user.orders.create
-    order.items << product
-    order.save
-    binding.pry
+    order.items.create(product: product)
+    if order.persisted?
+      render json: {
+        message: 'Product was successfully added to your order',
+        order: order,
+        items: order.products
+      }, status: 201
+    else
+      render json: { message: 'Something went wrong...' }, status: 422
+    end
   end
 end
