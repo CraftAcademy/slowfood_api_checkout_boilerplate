@@ -16,4 +16,19 @@ class Api::OrdersController < ApplicationController
       render json: { message: 'Something went wrong...' }, status: 422
     end
   end
+
+  def update
+    order = Order.find(params[:id])
+    product = Product.find(params[:product_id])
+    new_item = order.items.create(product: product)
+    if new_item.persisted?
+      render json: {
+        message: 'Product was successfully added to your order',
+        order: order,
+        items: order.products
+      }, status: 201
+    else
+      render json: { message: 'Something went wrong...' }, status: 422
+    end
+  end
 end
