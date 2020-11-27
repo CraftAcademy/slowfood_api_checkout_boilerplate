@@ -7,7 +7,7 @@ RSpec.describe 'PUT /api/orders/:id', type: :request do
   let!(:product_already_in_order) { create(:product) }
   let!(:product_to_add) { create(:product, name: 'Pizza') }
 
-  describe '' do
+  describe 'with valid data' do
     before do
       existing_order.items.create(product: product_already_in_order)
       put "/api/orders/#{existing_order.id}",
@@ -20,7 +20,6 @@ RSpec.describe 'PUT /api/orders/:id', type: :request do
     }
 
     it 'is expected to have product data in "items" ' do
-      binding.pry
       expect(JSON.parse(response.body)['items'][1]['name'])
         .to eq 'Pizza'
     end
