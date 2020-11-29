@@ -20,7 +20,7 @@ RSpec.describe 'PUT /api/orders/:id', type: :request do
     }
 
     it 'is expected to have product data in "items" ' do
-      expect(JSON.parse(response.body)['items'][1]['name'])
+      expect(JSON.parse(response.body)['order']['items'][1]['name'])
         .to eq 'Pizza'
     end
   end

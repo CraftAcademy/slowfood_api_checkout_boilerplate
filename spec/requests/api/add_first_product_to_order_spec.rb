@@ -23,11 +23,11 @@ RSpec.describe 'POST /api/orders', type: :request do
     end
 
     it 'is expected to have "items" key with product in it' do
-      expect(JSON.parse(response.body)['items'].count).to eq 1
+      expect(JSON.parse(response.body)['order']['items'].count).to eq 1
     end
 
     it 'is expected to have product data in "items" ' do
-      expect(JSON.parse(response.body)['items'][0]['name'])
+      expect(JSON.parse(response.body)['order']['items'][0]['name'])
         .to eq 'Swedish meatballs'
     end
   end
