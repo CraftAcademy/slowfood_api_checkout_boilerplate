@@ -9,7 +9,7 @@ class Api::OrdersController < ApplicationController
     if order.persisted?
       render json: {
         message: 'Product was successfully added to your order',
-        order: order_as_json(order),
+        order: order_as_json(order)
       }, status: 201
     else
       render json: { message: 'Something went wrong...' }, status: 422
@@ -18,20 +18,24 @@ class Api::OrdersController < ApplicationController
 
   def update
     order = Order.find(params[:id])
-    product = Product.find(params[:product_id])
-    new_item = order.items.create(product: product)
-    if new_item.persisted?
-      render json: {
-        message: 'Product was successfully added to your order',
-        order: order_as_json(order),
-      }, status: 201
+    if params[:status] == 'confirmed'
+      order.update(confirmed: true)
+      render json: { message: 'Your order was confirmed. You can pick up your food in 30 minutes' }, status: 201
     else
-      render json: { message: 'Something went wrong...' }, status: 422
+      product = Product.find(params[:product_id])
+      new_item = order.items.create(product: product)
+      if new_item.persisted?
+        render json: {
+          message: 'Product was successfully added to your order',
+          order: order_as_json(order)
+        }, status: 201
+      else
+        render json: { message: 'Something went wrong...' }, status: 422
+      end
     end
   end
 
   private
-
 
   def order_as_json(order)
     order_as_json = order.as_json
