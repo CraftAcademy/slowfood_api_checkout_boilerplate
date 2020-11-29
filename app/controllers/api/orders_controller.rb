@@ -9,8 +9,7 @@ class Api::OrdersController < ApplicationController
     if order.persisted?
       render json: {
         message: 'Product was successfully added to your order',
-        order: order,
-        items: order.products
+        order: order_as_json(order),
       }, status: 201
     else
       render json: { message: 'Something went wrong...' }, status: 422
@@ -24,11 +23,19 @@ class Api::OrdersController < ApplicationController
     if new_item.persisted?
       render json: {
         message: 'Product was successfully added to your order',
-        order: order,
-        items: order.products
+        order: order_as_json(order),
       }, status: 201
     else
       render json: { message: 'Something went wrong...' }, status: 422
     end
+  end
+
+  private
+
+
+  def order_as_json(order)
+    order_as_json = order.as_json
+    order_as_json['items'] = order.products.as_json
+    order_as_json
   end
 end
