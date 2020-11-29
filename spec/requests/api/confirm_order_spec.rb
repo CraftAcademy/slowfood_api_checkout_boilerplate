@@ -7,11 +7,11 @@ RSpec.describe 'PUT /api/orders/:id', type: :request do
   let!(:product_already_in_order) { create(:product) }
   let!(:product_to_add) { create(:product, name: 'Pizza') }
 
-  describe 'with valid data' do
+  describe 'with valid action param' do
     before do
       existing_order.items.create(product: product_already_in_order)
       put "/api/orders/#{existing_order.id}",
-          params: { product_id: product_to_add.id },
+          params: { status: 'confirmed'},
           headers: authorization_headers
     end
 
@@ -19,9 +19,9 @@ RSpec.describe 'PUT /api/orders/:id', type: :request do
       expect(response).to have_http_status 201
     }
 
-    it 'is expected to have product data in "items" ' do
-      expect(JSON.parse(response.body)['order']['items'][1]['name'])
-        .to eq 'Pizza'
+    it 'is expected to reurn a success message ' do
+      expect(JSON.parse(response.body)['message'])
+        .to eq 'Your order was confirmed. You can pick up your food in 30 minutes'
     end
   end
 end
