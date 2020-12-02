@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   namespace :api do
     resources :products, only: [:index]
     resources :orders, only: [:create, :update]
-    resource :articles, only: [:create]
+    resources :articles, only: [:create]
+    resources :subscriptions, only: [:create]
   end
 end

@@ -12,6 +12,7 @@ gem 'pg', '>= 0.18', '< 2.0'
 gem 'puma', '~> 3.7'
 gem 'rack-cors', require: 'rack/cors'
 gem 'devise_token_auth'
+gem 'stripe-rails'
 
 group :development, :test do
   gem 'coveralls', require: false
@@ -20,6 +21,7 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'shoulda-matchers'
   gem 'factory_bot_rails'
+  gem 'stripe-ruby-mock', require: 'stripe_mock'
 end
 
 group :development do
